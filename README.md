@@ -16,22 +16,20 @@ AI 跑任务时常常顺手打开记事本、浏览器、资源管理器、安�
 
 ## 安装
 
-从本仓库安装（需要本机有 DSH 的插件安装能力）：
+在 DSH 里打开 **设置 → 插件管理器**，安装下面任一来源：
 
-```bash
-dsh plugin add github:Yyhy110421/dsh-window-sweeper
+```
+github:Yyhy110421/dsh-window-sweeper
 ```
 
-或手动：把本仓库挂到 profile 的 `node_modules/dsh-window-sweeper`，并在 `cordis.patch.yml` 追加：
-
-```yaml
-- id: window-sweeper
-  name: 'dsh-window-sweeper'
-  config:
-    action: minimize
+```
+file:<本仓库的绝对路径>
 ```
 
 装完**重启 DSH** 生效。
+
+> 注意：`file:` 安装是**实体拷贝**，改完源码要卸载再装才会更新；`update` 只支持 npm 注册表插件。
+> 本插件不发布到 npm。
 
 ## 配置
 

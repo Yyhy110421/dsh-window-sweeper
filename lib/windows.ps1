@@ -3,6 +3,16 @@ param(
   [string]$Hwnds = '',
   [int]$ExcludePid = 0
 )
+# 中文标题不能靠控制台编码：Node 捕获 stdout 时，Windows PowerShell 5.1
+# 会按系统 ANSI（GBK）写出，[Console]::OutputEncoding 也救不回来。
+# 所以统一把 JSON 里的非 ASCII 字符转成 \uXXXX 转义，管道里永远是纯 ASCII。
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
+
+function ConvertTo-AsciiJson($value) {
+  $json = $value | ConvertTo-Json -Compress -Depth 3
+  return [regex]::Replace($json, '[^\u0000-\u007F]', { param($m) '\u{0:x4}' -f [int][char]$m.Value })
+}
 $sig = @"
 using System;
 using System.Text;
@@ -54,7 +64,7 @@ function Get-WinList {
 }
 
 switch ($Action) {
-  'list' { @(Get-WinList) | ConvertTo-Json -Compress -Depth 3 }
+  'list' { ConvertTo-AsciiJson @(Get-WinList) }
   default {
     if ([string]::IsNullOrWhiteSpace($Hwnds)) { '[]' ; exit 0 }
     $ids = $Hwnds.Split(',') | ForEach-Object { [int64]$_.Trim() }
@@ -65,6 +75,6 @@ switch ($Action) {
       else { $ok = [WinEnum]::PostMessageW($h, 0x0010, [IntPtr]::Zero, [IntPtr]::Zero) }
       $res += [pscustomobject]@{ hwnd = $id; ok = $ok }
     }
-    @($res) | ConvertTo-Json -Compress
+    ConvertTo-AsciiJson @($res)
   }
 }
