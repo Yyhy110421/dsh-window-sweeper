@@ -1,6 +1,6 @@
 {
   "name": "dsh-window-sweeper",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": false,
   "description": "清场：任务收尾时把 AI 本次新开的窗口最小化或关掉。",
   "type": "module",
