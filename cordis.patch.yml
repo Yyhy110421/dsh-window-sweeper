@@ -1,0 +1,10 @@
+# dsh-window-sweeper 组合包补丁：插入窗口收尾插件行。
+# 配置项（都可省略）：
+#   action: minimize | close      默认动作（工具调用时也允许覆盖）
+#   excludeExe: [进程名...]        永不触碰的进程
+#   excludeTitleKeywords: [词...]  标题命中即跳过
+- insert:
+    - id: window-sweeper
+      name: 'dsh-window-sweeper'
+      config:
+        action: minimize
